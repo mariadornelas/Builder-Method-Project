@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/** O que caracteriza o Builder: passos nomeados, estados impossíveis impedidos e produto separado. */
 class BuilderDesignTest {
 
     @Test
@@ -73,7 +72,6 @@ class BuilderDesignTest {
 
     @Test
     void construirDoZeroDeveExigirOsCincoObrigatoriosEMaisNada() {
-        // com apenas os obrigatórios o produto já é válido: opcionais nunca são necessários
         SensorConfigurado s = new SensorBuilder().id("A").grandeza(Grandeza.VIBRACAO).unidade("mm/s")
                 .faixa(0, 100).limites(4.5, 7.1).build();
 

@@ -65,8 +65,6 @@ class DiretorSensoresTest {
 
     @Test
     void receitaDepoisDeOutrasNaoDeveHerdarNadaDelas() {
-        // Se reiniciar() falhasse, o termopar herdaria protocolo, tag "pressao"/"vibracao",
-        // ganho 1,02 e intervalo 100 das montagens anteriores.
         SensorConfigurado isolado = new DiretorSensores(new SensorBuilder()).termoparPadrao("T-09");
 
         diretor.transdutorPressao("P-01", "x:502");

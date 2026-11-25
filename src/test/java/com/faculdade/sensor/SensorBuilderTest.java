@@ -8,13 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SensorBuilderTest {
 
-    /** Builder com todos os obrigatórios e mais nada. */
     private static SensorBuilder minimo() {
         return new SensorBuilder().id("T-01").grandeza(Grandeza.TEMPERATURA).unidade("°C")
                 .faixa(0, 100).limites(80, 90);
     }
-
-    // ---- defaults e montagem completa ----
 
     @Test
     void soComObrigatoriosDeveAplicarOsPadroes() {
@@ -73,8 +70,6 @@ class SensorBuilderTest {
         assertSame(b, b.reiniciar());
     }
 
-    // ---- obrigatórios ausentes ----
-
     @Test
     void buildSemNadaDeveListarTodosOsObrigatoriosAusentes() {
         IllegalStateException e = assertThrows(IllegalStateException.class, () -> new SensorBuilder().build());
@@ -91,16 +86,14 @@ class SensorBuilderTest {
         assertTrue(semId.getMessage().endsWith(": id"), semId.getMessage());
 
         assertThrows(IllegalStateException.class,
-                () -> new SensorBuilder().id("A").unidade("bar").faixa(0, 1).limites(0.5, 0.8).build());   // grandeza
+                () -> new SensorBuilder().id("A").unidade("bar").faixa(0, 1).limites(0.5, 0.8).build());
         assertThrows(IllegalStateException.class,
-                () -> new SensorBuilder().id("A").grandeza(Grandeza.PRESSAO).faixa(0, 1).limites(0.5, 0.8).build());   // unidade
+                () -> new SensorBuilder().id("A").grandeza(Grandeza.PRESSAO).faixa(0, 1).limites(0.5, 0.8).build());
         assertThrows(IllegalStateException.class,
-                () -> new SensorBuilder().id("A").grandeza(Grandeza.PRESSAO).unidade("bar").limites(0.5, 0.8).build());   // faixa
+                () -> new SensorBuilder().id("A").grandeza(Grandeza.PRESSAO).unidade("bar").limites(0.5, 0.8).build());
         assertThrows(IllegalStateException.class,
-                () -> new SensorBuilder().id("A").grandeza(Grandeza.PRESSAO).unidade("bar").faixa(0, 1).build());   // limites
+                () -> new SensorBuilder().id("A").grandeza(Grandeza.PRESSAO).unidade("bar").faixa(0, 1).build());
     }
-
-    // ---- validação de cada passo ----
 
     @Test
     void idEUnidadeDevemSerValidados() {
@@ -162,8 +155,6 @@ class SensorBuilderTest {
         assertEquals(1.0, s.offset());
     }
 
-    // ---- tags ----
-
     @Test
     void tagsRepetidasDevemSerIgnoradasMantendoAOrdem() {
         SensorConfigurado s = minimo().tag("b").tag("a").tag("b").tag("c").tag("a").build();
@@ -179,8 +170,6 @@ class SensorBuilderTest {
         assertThrows(IllegalArgumentException.class, () -> b.tag(" "));
     }
 
-    // ---- protocolo e endereço andam juntos ----
-
     @Test
     void protocoloEEnderecoDevemSerValidados() {
         SensorBuilder b = new SensorBuilder();
@@ -190,16 +179,14 @@ class SensorBuilderTest {
         assertThrows(IllegalArgumentException.class, () -> b.protocolo(Protocolo.MQTT, " "));
     }
 
-    // ---- coerência entre passos (só detectável no build) ----
-
     @Test
     void limitesForaDaFaixaDevemSerRecusadosNoBuild() {
         assertThrows(IllegalStateException.class,
                 () -> new SensorBuilder().id("A").grandeza(Grandeza.PRESSAO).unidade("bar")
-                        .faixa(0, 16).limites(8, 20).build());       // crítico acima do máximo
+                        .faixa(0, 16).limites(8, 20).build());
         assertThrows(IllegalStateException.class,
                 () -> new SensorBuilder().id("A").grandeza(Grandeza.PRESSAO).unidade("bar")
-                        .faixa(5, 16).limites(4, 10).build());       // alerta abaixo do mínimo
+                        .faixa(5, 16).limites(4, 10).build());
     }
 
     @Test
@@ -215,8 +202,6 @@ class SensorBuilderTest {
 
         assertThrows(IllegalStateException.class, b::build);
     }
-
-    // ---- reuso e independência dos produtos ----
 
     @Test
     void builderDeveSerReutilizavelComProdutosIndependentes() {
